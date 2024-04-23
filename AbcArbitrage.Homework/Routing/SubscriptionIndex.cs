@@ -94,8 +94,9 @@ namespace AbcArbitrage.Homework.Routing
                         {
                             foreach (var p in possible_results)
                             {
+                                var cleanfilter = routingContent.Parts.Where(x => !string.IsNullOrEmpty(x)).ToList();
                                 int take_count = sub.ContentPattern.Parts.Count;
-                                if (take_count > routingContent.Parts.Count) { take_count = routingContent.Parts.Count; }
+                                if (take_count > cleanfilter.Count) { take_count = cleanfilter.Count; }
 
                                 if (string.Join(",", p) == string.Join(",", sub.ContentPattern.Parts.Take(take_count).ToArray()))
                                 {
