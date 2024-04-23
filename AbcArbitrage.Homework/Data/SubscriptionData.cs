@@ -12,34 +12,20 @@ namespace AbcArbitrage.Homework.Data
     public class SubscriptionData
     {
 
-        public List<Subscription> Data_Subscriptions;
-
-        Config config = new Config();
-        public SubscriptionData()
-        {         
-            string Subscription_Json_Data = File.ReadAllText(config.Subscription_Json_Path);
-
-            List<Subscription>? Data_Subscription = JsonConvert.DeserializeObject<List<Subscription>>(Subscription_Json_Data);
-
-            if (Data_Subscription != null)
-            {
-                Data_Subscriptions = Data_Subscription;
-            }
-            else
-            {
-                Data_Subscriptions = new List<Subscription>();
-            }
-        }
-
         public List<Subscription> Get()
         {
-            return Data_Subscriptions;
+            return Global.Data_Subscription;
         }
 
         public List<Subscription> Add(IEnumerable<Subscription> subscription)
         {
             foreach (Subscription sub in subscription)
             {
+                //if (Global.Data_Subscription.Any(x => x.ConsumerId.Equals(sub.ConsumerId) && x.MessageTypeId.Equals(sub.MessageTypeId)))
+                //{
+                //    var ExistingSub = Global.Data_Subscription.Where(x => x.ConsumerId.Equals(sub.ConsumerId) && x.MessageTypeId.Equals(sub.MessageTypeId)).First();
+                    
+                //}
                 Global.Data_Subscription.Add(sub);
             }
 
@@ -50,33 +36,28 @@ namespace AbcArbitrage.Homework.Data
 
         public List<Subscription> Remove(IEnumerable<Subscription> subscription)
         {
-            
+
             foreach (Subscription sub in subscription)
             {
-                Data_Subscriptions.Remove(sub);
+                Global.Data_Subscription.Remove(sub);
             }
-           
-            SaveDataToJson();
-            return Data_Subscriptions;
+
+            //SaveDataToJson();
+            return Global.Data_Subscription;
         }
 
         public List<Subscription> RemoveForConsumer(ClientId consumer)
         {
-            List<Subscription> _to_remove = Data_Subscriptions.Where(x=>x.ConsumerId.Equals(consumer)).ToList();
-            foreach(Subscription sub in _to_remove)
+            List<Subscription> _to_remove = Global.Data_Subscription.Where(x => x.ConsumerId.Equals(consumer)).ToList();
+            foreach (Subscription sub in _to_remove)
             {
-                Data_Subscriptions.Remove(sub);
+                Global.Data_Subscription.Remove(sub);
             }
 
-            SaveDataToJson();
-            return Data_Subscriptions;
+            // SaveDataToJson();
+            return Global.Data_Subscription;
         }
 
 
-        private void SaveDataToJson()
-        {
-            string jsonContent = JsonConvert.SerializeObject(Data_Subscriptions);
-            File.WriteAllText(config.Subscription_Json_Path, jsonContent);
-        }
     }
 }

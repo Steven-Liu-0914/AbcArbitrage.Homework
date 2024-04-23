@@ -3,12 +3,14 @@
 // Proprietary and confidential
 // Written by Olivier Coanet <o.coanet@abc-arbitrage.com>, 2020-10-01
 
+using Newtonsoft.Json;
 using System;
 
 namespace AbcArbitrage.Homework.Routing
 {
     public readonly struct MessageTypeId : IEquatable<MessageTypeId>
     {
+        [JsonProperty]
         private readonly string _value;
 
         public MessageTypeId(string value) => _value = value;

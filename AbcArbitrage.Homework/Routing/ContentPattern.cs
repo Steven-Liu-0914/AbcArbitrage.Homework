@@ -3,6 +3,7 @@
 // Proprietary and confidential
 // Written by Olivier Coanet <o.coanet@abc-arbitrage.com>, 2020-10-01
 
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace AbcArbitrage.Homework.Routing
         /// </summary>
         public static readonly ContentPattern Any = new();
 
+        [JsonProperty]
         private readonly IReadOnlyList<string>? _parts;
 
         public ContentPattern(IReadOnlyList<string> parts) => _parts = parts;

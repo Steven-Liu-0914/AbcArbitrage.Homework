@@ -47,8 +47,15 @@ namespace AbcArbitrage.Homework.Data
             {
                 File.Create(ContentPattern_Json_Path);
             }
+
+            ClearAllData();
         }
 
-       
+        public void ClearAllData()
+        {
+            File.WriteAllText(Subscription_Json_Path, "");
+            File.WriteAllText(Client_Json_Path, "");
+            File.WriteAllText(ContentPattern_Json_Path, "");
+        }
     }
 }

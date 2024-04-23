@@ -10,5 +10,7 @@ namespace AbcArbitrage.Homework.Data
     public static class Global
     {
         public static List<Subscription> Data_Subscription = new List<Subscription>();
+
+
     }
 }
