@@ -1,0 +1,7 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">Copyright (C) Abc Arbitrage Asset Management - All Rights Reserved&#xD;
+Unauthorized copying of this file, via any medium is strictly prohibited&#xD;
+Proprietary and confidential&#xD;
+Written by $USER_NAME$ &lt;$USER_LOGIN$@abc-arbitrage.com&gt;, $CURRENT_YEAR$-$CURRENT_MONTH$-$CURRENT_DAY$</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Coanet/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Delisted/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>
