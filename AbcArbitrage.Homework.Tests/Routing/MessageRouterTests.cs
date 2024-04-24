@@ -291,5 +291,242 @@ namespace AbcArbitrage.Homework.Routing
             // Assert
             Assert.Equal(new[] { clientId }, clientIds);
         }
+
+        [Fact]
+        public void Subscriptions_Remove_MessageType_Add_Single_Remove_Single()
+        {
+            var clientId = new ClientId("Client.1");
+            Subscription subscription = Subscription.Of<RoutableMessages.TradingHalted>(clientId);
+            _subscriptionIndex.AddSubscriptions(new[]
+            {
+               subscription
+            });
+
+            _subscriptionIndex.RemoveSubscriptions(new[]
+            {
+               subscription
+            });
+
+            var routableMessage = new RoutableMessages.TradingHalted { ExchangeCode = "NASDAQ", Symbol = "MSFT" };
+
+            var clientIds = _router.GetConsumers(routableMessage).ToList();
+
+            Assert.Empty(clientIds);
+        }
+
+        [Fact]
+        public void Subscriptions_Remove_MessageType_Add_Multi_Remove_Single()
+        {
+            var clientId = new ClientId("Client.1");
+            Subscription subscription_PriceUpdated = Subscription.Of<RoutableMessages.PriceUpdated>(clientId);
+            Subscription subscription_TradingHalted = Subscription.Of<RoutableMessages.TradingHalted>(clientId);
+            _subscriptionIndex.AddSubscriptions(new[]
+            {
+               subscription_TradingHalted,
+               subscription_PriceUpdated
+            });
+
+            _subscriptionIndex.RemoveSubscriptions(new[]
+            {
+               subscription_TradingHalted
+            });
+
+            var routableMessage = new RoutableMessages.PriceUpdated { ExchangeCode = "NASDAQ", Symbol = "MSFT" };
+
+            var clientIds = _router.GetConsumers(routableMessage).ToList();
+
+            Assert.Equal(new[] { clientId }, clientIds);
+        }
+
+        [Fact]
+        public void Subscriptions_Remove_MessageType_Add_Multi_Remove_Multi()
+        {
+            var clientId = new ClientId("Client.1");
+            Subscription subscription_PriceUpdated = Subscription.Of<RoutableMessages.PriceUpdated>(clientId);
+            Subscription subscription_TradingHalted = Subscription.Of<RoutableMessages.TradingHalted>(clientId);
+            _subscriptionIndex.AddSubscriptions(new[]
+            {
+               subscription_TradingHalted,
+               subscription_PriceUpdated
+            });
+
+            _subscriptionIndex.RemoveSubscriptions(new[]
+            {
+               subscription_TradingHalted,
+                subscription_PriceUpdated
+            });
+
+            var routableMessage = new RoutableMessages.PriceUpdated { ExchangeCode = "NASDAQ", Symbol = "MSFT" };
+
+            var clientIds = _router.GetConsumers(routableMessage).ToList();
+
+            Assert.Empty(clientIds);
+        }
+
+        [Theory]
+        [InlineData("NYSE")]
+        [InlineData("NASDAQ.AMZN")]
+        [InlineData("NYSE.MSFT")]
+        [InlineData("*.AMZN")]
+        [InlineData("NYSE.*")]
+        [InlineData("*.NASDAQ")]
+        [InlineData("MSFT.NASDAQ")]
+        public void Subscriptions_Remove_MessageTypeContentPattern_Add_Single_Remove_Single(string contentPattern)
+        {
+            var clientId = new ClientId("Client.1");
+            Subscription subscription = Subscription.Of<RoutableMessages.TradingHalted>(clientId, ContentPattern.Split(contentPattern));
+            _subscriptionIndex.AddSubscriptions(new[]
+            {
+               subscription
+            });
+
+            _subscriptionIndex.RemoveSubscriptions(new[]
+            {
+               subscription
+            });
+
+            var routableMessage = new RoutableMessages.TradingHalted { ExchangeCode = "NASDAQ", Symbol = "MSFT" };
+
+            var clientIds = _router.GetConsumers(routableMessage).ToList();
+
+            Assert.Empty(clientIds);
+        }
+
+        [Theory]
+        [InlineData("*","*")]
+        [InlineData("NASDAQ.AMZN", "NASDAQ")]
+        [InlineData("NASDAQ.AMZN", "NASDAQ.*")]
+        [InlineData("NYSE.MSFT","NYSE.MSFT.TECH")]
+        [InlineData("*.AMZN","NASDAQ,AMZN")]
+        [InlineData("NYSE.*","NYSE.MSFT.TECH")]
+        [InlineData("*.NASDAQ", "*")]   
+        public void Subscriptions_Remove_MessageTypeContentPattern_Add_Multi_Remove_Single(string contentPattern_add, string contentPattern_add_remove)
+        {
+            var clientId = new ClientId("Client.1");
+            Subscription subscription_add = Subscription.Of<RoutableMessages.TradingHalted>(clientId, ContentPattern.Split(contentPattern_add));
+
+            Subscription subscription_remove = Subscription.Of<RoutableMessages.TradingHalted>(clientId, ContentPattern.Split(contentPattern_add_remove));
+
+            _subscriptionIndex.AddSubscriptions(new[]
+            {
+               subscription_add
+            });
+
+            _subscriptionIndex.RemoveSubscriptions(new[]
+            {
+               subscription_remove
+            });
+
+            var routableMessage = new RoutableMessages.TradingHalted { ExchangeCode = "NASDAQ", Symbol = "MSFT" };
+
+            var clientIds = _router.GetConsumers(routableMessage).ToList();
+
+            Assert.Empty(clientIds);
+        }
+
+        [Theory]
+        [InlineData("*", "NYSE")]
+        [InlineData("NASDAQ.MSFT", "NYSE.MSFT")]
+        [InlineData("*.MSFT", "NYSE,AMZN")]
+        [InlineData("*.*", "NYSE.MSFT.TECH")]
+        [InlineData("NASDAQ.*", "NYSE,*")]
+        public void Subscriptions_Remove_MessageTypeContentPattern_Add_Multi_Remove_Single_2(string contentPattern_add, string contentPattern_add_remove)
+        {
+            var clientId = new ClientId("Client.1");
+            Subscription subscription_add = Subscription.Of<RoutableMessages.TradingHalted>(clientId, ContentPattern.Split(contentPattern_add));
+
+            Subscription subscription_remove = Subscription.Of<RoutableMessages.TradingHalted>(clientId, ContentPattern.Split(contentPattern_add_remove));
+
+            _subscriptionIndex.AddSubscriptions(new[]
+            {
+               subscription_add
+            });
+
+            _subscriptionIndex.RemoveSubscriptions(new[]
+            {
+               subscription_remove
+            });
+
+            var routableMessage = new RoutableMessages.TradingHalted { ExchangeCode = "NASDAQ", Symbol = "MSFT" };
+
+            var clientIds = _router.GetConsumers(routableMessage).ToList();
+
+            Assert.Equal(new[] { clientId }, clientIds);
+        }
+
+        
+
+        [Fact]
+        public void Client_Remove_Add_Single_Remove_Single()
+        {
+            var clientId = new ClientId("Client.1");
+            Subscription subscription = Subscription.Of<RoutableMessages.TradingHalted>(clientId, ContentPattern.Split("NASDAQ.*.*"));
+            Subscription subscription2 = Subscription.Of<RoutableMessages.PriceUpdated>(clientId, ContentPattern.Split("MSFT.*.*"));
+            _subscriptionIndex.AddSubscriptions(new[]
+            {
+               subscription,subscription2
+            });
+
+            _subscriptionIndex.RemoveSubscriptionsForConsumer(clientId);
+
+            var routableMessage = new RoutableMessages.TradingHalted { ExchangeCode = "NASDAQ", Symbol = "MSFT" };
+
+            var clientIds = _router.GetConsumers(routableMessage).ToList();
+
+            Assert.Empty(clientIds);
+
+        }
+
+        [Fact]
+        public void Client_Remove_Add_Multi_Remove_Single()
+        {
+            var clientId1 = new ClientId("Client.1");
+            var clientId2 = new ClientId("Client.2");
+            Subscription clientId1_subscription = Subscription.Of<RoutableMessages.TradingHalted>(clientId1, ContentPattern.Split("NASDAQ.*.*"));
+            Subscription clientId1_subscription2 = Subscription.Of<RoutableMessages.PriceUpdated>(clientId1, ContentPattern.Split("MSFT.*.*"));
+
+            Subscription clientId2_subscription = Subscription.Of<RoutableMessages.TradingHalted>(clientId2, ContentPattern.Split("NASDAQ.*.*"));
+            Subscription clientId2_subscription2 = Subscription.Of<RoutableMessages.InstrumentAdded>(clientId2, ContentPattern.Split("MSFT.*.*"));
+
+            _subscriptionIndex.AddSubscriptions(new[]
+            {
+               clientId1_subscription,clientId1_subscription2,clientId2_subscription,clientId2_subscription2
+            });
+
+            _subscriptionIndex.RemoveSubscriptionsForConsumer(clientId1);
+      
+            var routableMessage = new RoutableMessages.TradingHalted { ExchangeCode = "NASDAQ", Symbol = "MSFT" };
+
+            var clientIds = _router.GetConsumers(routableMessage).ToList();
+
+            Assert.Equal(new[] { clientId2 }, clientIds);
+
+        }
+
+        [Fact]
+        public void Client_Remove_Add_Multi_Remove_Multi()
+        {
+            var clientId1 = new ClientId("Client.1");
+            var clientId2 = new ClientId("Client.2");
+            Subscription clientId1_subscription = Subscription.Of<RoutableMessages.TradingHalted>(clientId1, ContentPattern.Split("NASDAQ.*.*"));
+            Subscription clientId1_subscription2 = Subscription.Of<RoutableMessages.PriceUpdated>(clientId2, ContentPattern.Split("MSFT.*.*"));
+
+            Subscription clientId2_subscription = Subscription.Of<RoutableMessages.InstrumentDelisted>(clientId1, ContentPattern.Split("NASDAQ.*.*"));
+            Subscription clientId2_subscription2 = Subscription.Of<RoutableMessages.InstrumentAdded>(clientId2, ContentPattern.Split("MSFT.*.*"));
+
+            _subscriptionIndex.AddSubscriptions(new[]
+            {
+               clientId1_subscription,clientId1_subscription2,clientId2_subscription,clientId2_subscription2
+            });
+
+            _subscriptionIndex.RemoveSubscriptionsForConsumer(clientId1);
+            _subscriptionIndex.RemoveSubscriptionsForConsumer(clientId1);
+            var routableMessage = new RoutableMessages.TradingHalted { ExchangeCode = "NASDAQ", Symbol = "MSFT" };
+
+            var clientIds = _router.GetConsumers(routableMessage).ToList();
+
+            Assert.Empty(clientIds);
+
+        }
     }
 }

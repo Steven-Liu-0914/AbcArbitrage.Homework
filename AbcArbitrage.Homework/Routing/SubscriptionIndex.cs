@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using static System.Net.WebRequestMethods;
 
 namespace AbcArbitrage.Homework.Routing
 {
@@ -30,12 +31,42 @@ namespace AbcArbitrage.Homework.Routing
 
         public void RemoveSubscriptions(IEnumerable<Subscription> subscriptions)
         {
-            // TODO
+            // TODO          
             foreach (Subscription sub in subscriptions)
             {
-                Data_Subscription.Remove(sub);
-            }
+                var filterList = Data_Subscription.Where(x => x.MessageTypeId.Equals(sub.MessageTypeId));
+                if (filterList.Any())
+                {
+                    if (sub.ContentPattern.Parts.Any())
+                    {
+                        for (int i = 0; i < sub.ContentPattern.Parts.Count; i++)
+                        {
+                            string condition = sub.ContentPattern.Parts[i];
+                            if (condition == "*")
+                            {
+                                filterList = filterList.Where(x => !string.IsNullOrEmpty(x.ContentPattern.Parts[i]));
+                            }
+                            else
+                            {
+                                filterList = filterList.Where(x => x.ContentPattern.Parts.Count >= i + 1 ? x.ContentPattern.Parts[i] == condition : false);
+                            }
 
+                            if (filterList.Any())
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if (filterList.Any())
+                {
+                    foreach (Subscription sub_to_remove in filterList.ToList())
+                    {
+                        Data_Subscription.Remove(sub_to_remove);
+                    }
+                }
+            }
         }
 
         public void RemoveSubscriptionsForConsumer(ClientId consumer)
@@ -65,8 +96,9 @@ namespace AbcArbitrage.Homework.Routing
                     //After getting all possible combinations, we could quick use linq to find those list in possible combinations.
                     //When parts in existing data length is more than the condition parts length, we can only take the top X
                     var Matched_messageType_routingContent = Data_Subscription.Where(x => x.MessageTypeId.Equals(messageTypeId) &&
-                    (all_possible_parts_combines.Contains
-                    (string.Join(".", x.ContentPattern.Parts.Take(x.ContentPattern.Parts.Count > valid_Parts.Count() ? valid_Parts.Count() : x.ContentPattern.Parts.Count)))));
+                    ((all_possible_parts_combines.Contains
+                    (string.Join(".", x.ContentPattern.Parts.Take(x.ContentPattern.Parts.Count > valid_Parts.Count() ? valid_Parts.Count() : x.ContentPattern.Parts.Count))))
+                    || !x.ContentPattern.Parts.Where(x => !string.IsNullOrEmpty(x)).Any()));
 
                     if (Matched_messageType_routingContent.Any())
                     {

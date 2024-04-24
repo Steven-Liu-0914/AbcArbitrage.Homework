@@ -26,5 +26,7 @@ namespace AbcArbitrage.Homework.Routing
                 yield return subscription.ConsumerId;
             }
         }
+
+        
     }
 }
