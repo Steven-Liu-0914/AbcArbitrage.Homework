@@ -41,8 +41,9 @@ From the diagram, we can see that the purpose here is to keep filtering the subs
 ![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/55f097f7-58a8-4c78-bb53-2742f4146761)
 
 So I used ANTS Profiler to check the time used for each sub-functions. From the result below can see that the LINQ function to check existing and equal takes about 
-55.5% times of process, so I tried to improve the use of LINQ part, to reduce LINQ query and find a more effective way to check item contains and equal.
-![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/efb26621-d4ef-4f89-b830-b4c0676a3673)
+60% times to process, so I tried to improve the use of LINQ part, to reduce LINQ query and find a more effective way to check item contains and equal.
+![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/e84da30a-441d-47b7-87d5-775f082322e8)
+
 
 After some research, I found that instead of using a List for result in the FindSubscriptions method,I should use HashSet which allows a faster lookup.
 
@@ -52,16 +53,18 @@ After some research, I found that instead of using a List for result in the Find
 **After**
 ![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/8eab1c31-b0c1-4aeb-8891-4c2ed21ce1a2)
 
-However, after the improvement of LINQ and change to use HashSet, the performance didn't get a signaificant improvement, the running time increase to 0.045 second instead.
-![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/04fc86cc-04e7-4189-8757-d899178a17a2)
+After the improvement of LINQ and change to use HashSet, the performance improved a bit, the running time increase to 0.045 second instead.
+![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/860dcd48-6795-448f-acd1-ad803b8cabbd)
 
-So I roll it back to the previous version. However, I believe the codes which I tried to improve is clearer and more concise to read and understand, it is not a bad try.
+
+However, although the performance only improve very little, I believe the new-version codes is clearer and more concise to read and understand.
 
 ## C. Improve SubscriptionIndex performance (Bonus)
 
 - C1. 
   - Did you find a solution where the benchmark executes in less than 10 microseconds?
-    
+    ![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/d5135e23-61dc-4054-bb3c-c730e3b9a899)
+
   - If you did, briefly explain your approach (max: 500 words): 
     
 
