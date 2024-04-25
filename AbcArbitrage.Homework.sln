@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbcArbitrage.Homework.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AbcArbitrage.Homework.Benchmarks", "AbcArbitrage.Homework.Benchmarks\AbcArbitrage.Homework.Benchmarks.csproj", "{E450C9B1-0B4F-43A7-9CBE-DC558C9CB4FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{DE4E5F96-77F9-415A-948C-0A88CCA81F8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp1", "ConsoleApp1\ConsoleApp1.csproj", "{F6C47366-160C-4A1E-A044-FAB68D252AD0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{E450C9B1-0B4F-43A7-9CBE-DC558C9CB4FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E450C9B1-0B4F-43A7-9CBE-DC558C9CB4FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E450C9B1-0B4F-43A7-9CBE-DC558C9CB4FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE4E5F96-77F9-415A-948C-0A88CCA81F8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE4E5F96-77F9-415A-948C-0A88CCA81F8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE4E5F96-77F9-415A-948C-0A88CCA81F8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE4E5F96-77F9-415A-948C-0A88CCA81F8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6C47366-160C-4A1E-A044-FAB68D252AD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6C47366-160C-4A1E-A044-FAB68D252AD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6C47366-160C-4A1E-A044-FAB68D252AD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6C47366-160C-4A1E-A044-FAB68D252AD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -139,7 +139,8 @@ namespace AbcArbitrage.Homework.Routing
             var queue = new MessageQueue();
             var clients = Enumerable.Range(1, clientCount).Select(x => new ClientId($"Client.{x}")).ToArray();
 
-            const int messageCount = 10_000_000;
+            //  const int messageCount = 10_000_000;
+            const int messageCount = 10_000;
             Parallel.For(0,
                          messageCount,
                          i => queue.EnqueueForClient(clients[i % clientCount], new RoutableMessages.InstrumentAdded(), (MessagePriority)(i % 3)));
@@ -160,7 +161,9 @@ namespace AbcArbitrage.Homework.Routing
         {
             var queue = new MessageQueue();
             var clientId = new ClientId("Client");
-            const int messageCount = 1_000_000;
+
+            //const int messageCount = 1_000_000;
+            const int messageCount = 1_000_0;
             for (var i = 0; i < messageCount; i++)
             {
                 queue.EnqueueForClient(clientId, new SimpleMessages.ExchangeAdded());

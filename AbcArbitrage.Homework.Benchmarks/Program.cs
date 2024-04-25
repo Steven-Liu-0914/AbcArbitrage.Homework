@@ -1,4 +1,5 @@
 ﻿using System;
+using AbcArbitrage.Homework.Routing;
 using BenchmarkDotNet.Running;
 
 namespace AbcArbitrage.Homework
@@ -7,7 +8,8 @@ namespace AbcArbitrage.Homework
     {
         public static void Main(string[] args)
         {
-            BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
+            var summary = BenchmarkRunner.Run<MessageRouterBenchmarks>();
+            //BenchmarkSwitcher.FromAssembly(typeof(Program).Assembly).Run(args);
 
             Console.WriteLine("Press enter to exit...");
             Console.ReadLine();
