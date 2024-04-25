@@ -59,8 +59,9 @@ After some research, I found that instead of using a List for result in the Find
 **After**
 ![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/8eab1c31-b0c1-4aeb-8891-4c2ed21ce1a2)
 
-After the reducing the usage of LINQ and change to use HashSet, the performance improved a bit, the process time increase from 0.023 second to 0.018 second.
-![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/860dcd48-6795-448f-acd1-ad803b8cabbd)
+After the reducing the usage of LINQ and change to use HashSet, the performance improved a bit, the process time increase from 0.021 second to 0.018 second.
+![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/ba8bb89d-f0e1-4db1-b1fb-0383f1f065c6)
+
 
 
 Although the performance only improve very little, I believe the new-version codes will be clearer and more concise to read and understand.
