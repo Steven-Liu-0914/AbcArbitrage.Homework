@@ -81,50 +81,29 @@ namespace AbcArbitrage.Homework.Routing
 
         public IEnumerable<Subscription> FindSubscriptions(MessageTypeId messageTypeId, MessageRoutingContent routingContent)
         {
-            // TODO
-            List<Subscription> result = new List<Subscription>();
-
-            if (!routingContent.Equals(MessageRoutingContent.Empty) && routingContent.Parts != null)
+            HashSet<Subscription> result = new HashSet<Subscription>(); // Use HashSet for faster lookup
+            if (routingContent.Equals(MessageRoutingContent.Empty) || routingContent.Parts == null || !routingContent.Parts.Where(x => !string.IsNullOrEmpty(x)).Any())
             {
-                //Get valid filter conditions first to exclude empty or null part.
+                // If valid routingContent is empty or null, only filter by MessageTypeId
+                result.UnionWith(Data_Subscription.Where(sub => sub.MessageTypeId.Equals(messageTypeId)));
+            }
+            else
+            {
                 var valid_Parts = routingContent.Parts.Where(x => !string.IsNullOrEmpty(x));
-
-                if (valid_Parts.Any())
+                List<string> all_possible_parts_combines = GetPossiblePartsByCondition(valid_Parts.ToList());
+                result.UnionWith(Data_Subscription
+                .Where(sub => sub.MessageTypeId.Equals(messageTypeId))
+                .Where(sub =>
                 {
-                    List<string> all_possible_parts_combines = GetPossiblePartsByCondition(valid_Parts.ToList());
-
-                    //After getting all possible combinations, we could quick use linq to find those list in possible combinations.
-                    //When parts in existing data length is more than the condition parts length, we can only take the top X
-                    var Matched_messageType_routingContent = Data_Subscription.Where(x => x.MessageTypeId.Equals(messageTypeId) &&
-                    ((all_possible_parts_combines.Contains
-                    (string.Join(".", x.ContentPattern.Parts.Take(x.ContentPattern.Parts.Count > valid_Parts.Count() ? valid_Parts.Count() : x.ContentPattern.Parts.Count))))
-                    || !x.ContentPattern.Parts.Where(x => !string.IsNullOrEmpty(x)).Any()));
-
-                    if (Matched_messageType_routingContent.Any())
-                    {
-                        foreach (var sub in Matched_messageType_routingContent)
-                        {
-                            if (!result.Contains(sub))
-                            {
-                                result.Add(sub);
-                            }
-                        }
-                    }
-                }
+                    var patternParts = sub.ContentPattern.Parts.Where(x => !string.IsNullOrEmpty(x)).ToList();
+                    int minLength = Math.Min(patternParts.Count, valid_Parts.Count()); //instead of using ?: to compare, found that Math.Min is very direct way to get the count
+                    return all_possible_parts_combines.Contains(string.Join(".", patternParts.Take(minLength))) || !patternParts.Any();
+                }));
             }
-            else // to improve performance, quickly return result only match with messageTypeId
-            {
-                var Matched_messageType = Data_Subscription.Where(x => x.MessageTypeId.Equals(messageTypeId));
 
-                if (Matched_messageType.Any())
-                {
-                    result = Matched_messageType.ToList();
-                }
-            }
 
             return result;
         }
-
 
         private List<string> GetPossiblePartsByCondition(List<string> Parts)
         {
