@@ -40,13 +40,12 @@ First of all, I analyze the flow of the ** MessageRouter.GetConsumers()** functi
 From the diagram, we can see that the purpose here is to keep filtering the subscription data to find the matches, and most of the time I used LINQ to check and filter the data.
 ![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/55f097f7-58a8-4c78-bb53-2742f4146761)
 
-So I used ANTS Profiler to check the time used for each sub-functions. From the result below can see that the LINQ function to check existing and equal takes about 
-60% times to process, so I tried to improve the use of LINQ part, to reduce LINQ query and find a more effective way to check item contains and equal.
+So I used ANTS Profiler to check the time used and create a console app to call the testing method **ShouldIncludeMatchingRoutableSubscriptionWithLongPattern()** in **MessageRouterTests**. 
+From the result below can see that the LINQ function to check existing and equal takes about 60% times to process, so I tried to improve the performance by enhancing the code to select data using LINQ and looking for a more effective way for data reading.
 ![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/04e12bfd-5faf-4038-929a-95fc044015d5)
 
 
-
-After some research, I found that instead of using a List for result in the FindSubscriptions method,HashSet might be a better option to allow a faster lookup, I made changes as below :
+After some research, I found that instead of using a List for result in the FindSubscriptions method, HashSet might be a better option to allow a faster lookup, so I made changes as below :
 
 1. Change from List<Subscription> to HashSet<Subscription>
 2. Consilidate the codes to combine validation for routingContent.Parts in one condition check.
@@ -59,19 +58,19 @@ After some research, I found that instead of using a List for result in the Find
 **After**
 ![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/8eab1c31-b0c1-4aeb-8891-4c2ed21ce1a2)
 
-After the reducing the usage of LINQ and change to use HashSet, the performance improved a bit, the process time increase from 0.021 second to 0.018 second.
+After the reducing the usage of LINQ and change to use HashSet, the performance improved a bit, the process time reduced from 0.021 second to 0.018 second.
 ![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/ba8bb89d-f0e1-4db1-b1fb-0383f1f065c6)
 
 
 
-Although the performance only improve very little, I believe the new-version codes will be clearer and more concise to read and understand.
+Although the performance only improved very little, I believe the new-version codes will be clearer and more concise to read and understand.
 
 ## C. Improve SubscriptionIndex performance (Bonus)
 
 - C1. 
   - Did you find a solution where the benchmark executes in less than 10 microseconds?
   
-Unfortunately I didn't find a way to improve SubscriptionIndex performance to less than 10 ms, my best result here 24.91ms for Mean Method.
+Unfortunately I didn't find best way to improve SubscriptionIndex performance to less than 10 ms, my best result here 24.91ms for Mean Method.
 ![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/d5135e23-61dc-4054-bb3c-c730e3b9a899)
 
 How I tried to improve the performace you may refer to my answer to A3.
