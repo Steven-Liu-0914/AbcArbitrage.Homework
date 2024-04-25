@@ -46,6 +46,16 @@ So I used ANTS Profiler to check the time used for each sub-functions. From the 
 
 After some research, I found that instead of using a List for result in the FindSubscriptions method,I should use HashSet which allows a faster lookup.
 
+**Before**
+![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/14ec5ebf-7797-4193-81c8-bbb0940132ba)
+
+**After**
+![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/8eab1c31-b0c1-4aeb-8891-4c2ed21ce1a2)
+
+However, after the improvement of LINQ and change to use HashSet, the performance didn't get a signaificant improvement, the running time increase to 0.045 second instead.
+![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/04fc86cc-04e7-4189-8757-d899178a17a2)
+
+So I roll it back to the previous version. However, I believe the codes which I tried to improve is clearer and more concise to read and understand, it is not a bad try.
 
 ## C. Improve SubscriptionIndex performance (Bonus)
 
