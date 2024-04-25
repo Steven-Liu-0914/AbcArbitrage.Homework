@@ -35,7 +35,16 @@ For SubscriptionIndex.RemoveSubscriptionsForConsumer() function :
 
 
 - A3.  Briefly document your approach here (max: 500 words)
-  
+First of all, I analyze the flow of the ** MessageRouter.GetConsumers()** function, understand the main logic here is to get the matched subsciprion from the subscription data stored, which is calling the **FindSubscriptions(MessageTypeId messageTypeId, MessageRoutingContent routingContent)** function, I draw a workflow diagram to show my coded logic in this function.
+
+From the diagram, we can see that the purpose here is to keep filtering the subscription data to find the matches, and LINQ here is the most common used function.
+![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/55f097f7-58a8-4c78-bb53-2742f4146761)
+
+So I used ANTS Profiler to check the time used for each sub-functions. From the result below can see that the LINQ function to check existing and equal takes about 
+55.5% times of process, so I tried to improve the use of LINQ part, to reduce LINQ query and find a more effective way to check item contains and equal.
+![image](https://github.com/Steven-Liu-0914/AbcArbitrage.Homework/assets/51730159/efb26621-d4ef-4f89-b830-b4c0676a3673)
+
+After some research, I found that instead of using a List for result in the FindSubscriptions method,I should use HashSet which allows a faster lookup.
 
 
 ## C. Improve SubscriptionIndex performance (Bonus)
